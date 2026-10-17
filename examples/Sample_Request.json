@@ -1,0 +1,13 @@
+<escape>{
+  "name": "Тестовый клиент",
+  "phone": "+10000000000",
+  "email": "client@example.com",
+  "city": "Тестовый город",
+  "device_type": "Стиральная машина",
+  "brand": "Bosch",
+  "problem": "Не сливает воду после стирки",
+  "priority": "normal",
+  "preferred_date": "2026-10-20",
+  "preferred_time_from": "10:00",
+  "preferred_time_to": "12:00"
+}</escape>
