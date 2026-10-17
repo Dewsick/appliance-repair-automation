@@ -1,1 +1,22 @@
+Секреты и настройки окружения
+.env
+.env.*
+!.env.example
+secrets/
+credentials.json
 
+Данные n8n
+.n8n/
+n8n_data/
+database.sqlite
+database.sqlite-*
+
+Резервные копии и журналы
+*.backup
+*.bak
+*.log
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+desktop.ini
