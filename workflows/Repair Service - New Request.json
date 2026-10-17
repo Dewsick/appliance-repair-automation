@@ -1,0 +1,1231 @@
+{
+  "name": "Repair Service - New Request",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Проанализируй описание неисправности клиента.\n\n{{ $json.body.message }}\n\nВерни JSON со следующими полями:\n\ndevice_type\nbrand\nproblem\npreferred_date\npreferred_time_from\npreferred_time_to\npriority\nmissing_fields\n\nНе добавляй пояснений.\n\npreferred_date:\nНикогда не возвращай относительные слова:\n\"сегодня\", \"завтра\", \"послезавтра\", \"в понедельник\" и т.п.\n\nВ preferred_time_from записывай случайное время от 8:00 до 20:00, если не указано время. \n\nЕсли речь идет о телевизоре или другом устройстве в device_type нужно записывать во множественном числе с бошой буквы, например \"Телевизоры\"\n\nВсегда преобразуй их в конкретную дату формата YYYY-MM-DD.\n\n\nНапример:\n\"завтра\" → конкретная календарная дата относительно текущей даты.\n\nmissing_fields:\nРазрешены ТОЛЬКО:\n\"device_type\"\n\"problem\"\n\"preferred_date\"\n\"preferred_time\"\n\nНикогда не добавляй:\n\"preferred_time_to\"\n\"priority\"\n\"точная дата\"\n\"brand\"\n\"name\"\n\"phone\"\n\"email\"\n\"city\"\n\nЕсли клиент сказал \"после 18:00\", это считается достаточным временем:\npreferred_time_from = \"18:00\"\npreferred_time_to = null\n\npriority никогда не считается отсутствующим.\nЕсли срочность не указана, priority = \"normal\".\n\nЕсли все четыре обязательных поля определены, missing_fields = [].\n\nВсе должно быть на русском языке. ",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -112,
+        528
+      ],
+      "id": "a197fa4d-5b3d-4e67-adf8-122e4dd3c76b",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openrouter/free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        768
+      ],
+      "id": "ce8ccffb-9e6d-4e23-b803-a7d5e4aaa4bb",
+      "name": "OpenRouter Chat Model"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"device_type\": \"string | null\",\n  \"brand\": \"string | null\",\n  \"problem\": \"string | null\",\n  \"preferred_date\": \"string | null\",\n  \"preferred_time_from\": \"string | null\",\n  \"preferred_time_to\": \"string | null\",\n  \"priority\": \"low | normal | high\",\n  \"missing_fields\": []\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -336,
+        864
+      ],
+      "id": "32f6c643-0c07-4f79-94c7-87d20d20ccc1",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const rawOutput = item.json.output;\n\n  if (typeof rawOutput !== 'string') {\n    throw new Error('AI Agent не вернул текстовый output');\n  }\n\n  let text = rawOutput.trim();\n\n  // Убираем Markdown-обёртку ```json ... ```\n  text = text\n    .replace(/^```json\\s*/i, '')\n    .replace(/^```\\s*/i, '')\n    .replace(/\\s*```$/i, '')\n    .trim();\n\n  let data;\n\n  try {\n    data = JSON.parse(text);\n  } catch (error) {\n    throw new Error('Не удалось распознать JSON от AI Agent');\n  }\n\n  if (!data || typeof data !== 'object' || Array.isArray(data)) {\n    throw new Error('AI Agent вернул некорректный JSON');\n  }\n\n  return {\n    json: data\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        528
+      ],
+      "id": "f7ef33e7-165e-474a-b13d-a1f48838208a",
+      "name": "parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "const clients = $input.all();\n\nconst request = $('structure').first().json;\n\nconst phone = String(request.phone || '').trim();\n\nif (!phone) {\n  return [{\n    json: {\n      ...request,\n      clientFound: false,\n      clientId: null,\n      error: 'Телефон клиента отсутствует.'\n    }\n  }];\n}\n\nconst client = clients.find(item => {\n  const clientPhone = String(item.json.phone || '').trim();\n\n  return clientPhone === phone;\n});\n\nreturn [{\n  json: {\n    ...request,\n    clientFound: Boolean(client),\n    clientId: client ? client.json.id : null\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        528
+      ],
+      "id": "950c0cc9-09db-4448-88f1-565c9419a7d3",
+      "name": "Find Client"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Oi4kuTmnWGGLP4Wf",
+          "mode": "list",
+          "cachedResultName": "Clients",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/Oi4kuTmnWGGLP4Wf"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        528
+      ],
+      "id": "dc5283e3-0c44-4388-be4f-465bb109b0e0",
+      "name": "Clients: Get Rows"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f2da0ae7-277a-4278-8343-d8e895c40be1",
+              "leftValue": "={{ $json.clientFound }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1360,
+        432
+      ],
+      "id": "9f1e350f-b379-4a52-9247-c9e9c9bb8ca9",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2032,
+        432
+      ],
+      "id": "f66fd201-5be2-45b0-97a5-03e60565c18a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_id": "={{ $json.clientId }}",
+            "description": "={{ $('Find Client').item.json.problem }}",
+            "problem": "={{ $('Find Client').item.json.problem }}",
+            "device_type": "={{ $('Find Client').item.json.device_type }}",
+            "brand": "={{ $('Find Client').item.json.brand }}",
+            "priority": "={{ $('Find Client').item.json.priority }}",
+            "status": "new",
+            "preferred_date": "={{ $('Find Client').item.json.preferred_date }}",
+            "preferred_time_from": "={{ $('Find Client').item.json.preferred_time_from }}",
+            "preferred_time_to": "={{ $('Find Client').item.json.preferred_time_to }}",
+            "created_at": "={{ $now.setZone('Europe/Moscow') }}",
+            "updated_at": "={{ $now.setZone('Europe/Moscow') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "device_type",
+              "displayName": "device_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "preferred_date",
+              "displayName": "preferred_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "preferred_time_from",
+              "displayName": "preferred_time_from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "preferred_time_to",
+              "displayName": "preferred_time_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "assigned_employee_id",
+              "displayName": "assigned_employee_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2256,
+        432
+      ],
+      "id": "ead61229-3feb-447a-ae3e-0d14e192f245",
+      "name": "requestget"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "Oi4kuTmnWGGLP4Wf",
+          "mode": "list",
+          "cachedResultName": "Clients",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/Oi4kuTmnWGGLP4Wf"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "last_contact_at": "={{ $now.setZone('Europe/Moscow') }}",
+            "name": "={{ $json.name }}",
+            "phone": "={{ $json.phone }}",
+            "city": "={{ $json.city }}",
+            "email": "={{ $json.email }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "last_contact_at",
+              "displayName": "last_contact_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1584,
+        512
+      ],
+      "id": "9c03a30a-80f8-4f6a-a5e1-e5d62efad701",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "460a0cf7-a277-475b-a989-3fb6abe782be",
+              "name": "clientId",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "e7f9c931-21e3-4872-85e4-fa1569c091e1",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "deed8f02-d065-4da7-8806-d5ac6c9267b8",
+              "name": "phone",
+              "value": "={{ $json.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "b10c2bdc-0a0f-49e6-ab38-226338484664",
+              "name": "city",
+              "value": "={{ $json.city }}",
+              "type": "string"
+            },
+            {
+              "id": "2f5b32ca-a215-44ed-bba2-60eaf6377526",
+              "name": "last_contact_at",
+              "value": "={{ $json.last_contact_at }}",
+              "type": "string"
+            },
+            {
+              "id": "30baaedb-cdce-4bf6-9c9f-2b791a969295",
+              "name": "createdAt",
+              "value": "={{ $json.createdAt }}",
+              "type": "string"
+            },
+            {
+              "id": "d12469b7-4b6a-4c22-93d9-c5783934b76b",
+              "name": "updatedAt",
+              "value": "={{ $json.updatedAt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1808,
+        512
+      ],
+      "id": "0fde66b0-d424-40bb-b8ca-2668b2d165ad",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "07r4n0I7yK2qFBhO",
+          "mode": "list",
+          "cachedResultName": "Employees",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/07r4n0I7yK2qFBhO"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2480,
+        432
+      ],
+      "id": "61bf0219-ddf7-4baf-8d21-f3f972eb7fb5",
+      "name": "Employees: Get Rows"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "35a2ab0e-bae1-4f77-afd2-aa71811ae45b",
+              "leftValue": "={{ $json.specialization }}",
+              "rightValue": "={{ $('requestget').first().json.device_type }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "f20e74d9-558c-4958-bba2-582713a31c24",
+              "leftValue": "={{ $json.active }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2704,
+        432
+      ],
+      "id": "4a116716-4065-4263-b764-5d481111e6c6",
+      "name": "Filter Available Employee",
+      "alwaysOutputData": true,
+      "retryOnFail": false
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2928,
+        432
+      ],
+      "id": "73e1f10f-83fd-4cdd-9c02-51c12bb5cba9",
+      "name": "Select Employee"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('requestget').first().json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "assigned_employee_id": "={{ $('Select Employee').first().json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "device_type",
+              "displayName": "device_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_date",
+              "displayName": "preferred_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_from",
+              "displayName": "preferred_time_from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_to",
+              "displayName": "preferred_time_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "assigned_employee_id",
+              "displayName": "assigned_employee_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        3376,
+        336
+      ],
+      "id": "2c657be9-8c5e-45a2-9aa7-b7ea6902850b",
+      "name": "Requests: Update Row"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "07r4n0I7yK2qFBhO",
+          "mode": "list",
+          "cachedResultName": "Employees",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/07r4n0I7yK2qFBhO"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Requests: Update Row').first().json.assigned_employee_id }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        3600,
+        336
+      ],
+      "id": "e5e05f56-1383-4401-b570-a0335d893690",
+      "name": "Employees: Get Rows1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.telegram_id }}",
+        "text": "=🔧 Новая заявка\n\nКлиент: {{ $('requestget').first().json.client_id }}\nТелефон: {{ $('Find Client').first().json.phone }}\n\nПрибор: {{ $('requestget').first().json.device_type }}\nБренд: {{ $('requestget').first().json.brand }}\nПроблема: {{ $('requestget').first().json.problem }}\n\n📅 Желаемая дата: {{ $('requestget').first().json.preferred_date }}\n🕐 Время: {{ $('requestget').first().json.preferred_time_from }}\n\nПриоритет: {{ $('requestget').first().json.priority }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Принять",
+                    "additionalFields": {
+                      "callback_data": "=accept_request_{{ $('requestget').first().json.id }}"
+                    }
+                  },
+                  {
+                    "text": "❌ Отклонить",
+                    "additionalFields": {
+                      "callback_data": "=reject_request_{{ $('requestget').first().json.id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3824,
+        336
+      ],
+      "id": "679d1d60-d6e6-472e-bec5-0740066eb60a",
+      "name": "Send a text message",
+      "webhookId": "2d1e8c6a-1a26-4c76-b6a4-2089919a36eb"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6250543b-cff9-4c66-870d-a48fa1613196",
+              "leftValue": "={{ !!$json.phone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1136,
+        528
+      ],
+      "id": "8bc6997b-f5f5-4f80-869f-d20549a71c03",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "84918a76-804b-4992-bd27-072e088ab88f",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -336,
+        528
+      ],
+      "id": "840733fd-fb6a-4251-9194-1b844ee95f3f",
+      "name": "Webhook",
+      "webhookId": "84918a76-804b-4992-bd27-072e088ab88f"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"error\": \"phone_required\",\n  \"message\": \"Укажите номер телефона для оформления заявки.\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1360,
+        624
+      ],
+      "id": "0bdb9274-4913-4c78-96c4-c9d23364e3e1",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce5d03ad-2f5c-4cf6-89e9-439647f00c9d",
+              "name": "name",
+              "value": "={{ $('Webhook').first().json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "c30cf2cb-e845-4d2e-9140-eba46eb286d2",
+              "name": "phone",
+              "value": "={{ $('Webhook').first().json.body.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "19a3449a-8a03-490b-9b42-ff4295c9a701",
+              "name": "email",
+              "value": "={{ $('Webhook').first().json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "1a18b7ca-7e50-4202-8f4e-27262dc6a530",
+              "name": "city",
+              "value": "={{ $('Webhook').first().json.body.city }}",
+              "type": "string"
+            },
+            {
+              "id": "202b1bf8-18d8-46f5-8ae0-28593260a325",
+              "name": "device_type",
+              "value": "={{ $json.device_type }}",
+              "type": "string"
+            },
+            {
+              "id": "68b44a48-678a-4478-bdab-0edd35e1ba1b",
+              "name": "brand",
+              "value": "={{ $json.brand }}",
+              "type": "string"
+            },
+            {
+              "id": "521d04af-1b43-4caf-86b9-9272be376345",
+              "name": "problem",
+              "value": "={{ $json.problem }}",
+              "type": "string"
+            },
+            {
+              "id": "30b51e59-8ffd-43c6-ab20-07527f5f3e73",
+              "name": "preferred_date",
+              "value": "={{ $now.setZone('Europe/Moscow').toFormat('yyyy-MM-dd') }}",
+              "type": "string"
+            },
+            {
+              "id": "9fee799f-cd1a-45b5-8038-1bb52ced14bb",
+              "name": "preferred_time_from",
+              "value": "={{ $json.preferred_time_from }}",
+              "type": "string"
+            },
+            {
+              "id": "4e2b52f5-471f-4e61-be03-00bc16da5935",
+              "name": "preferred_time_to",
+              "value": "={{ $json.preferred_time_to }}",
+              "type": "string"
+            },
+            {
+              "id": "02de58bb-00dd-43ff-8cfc-39cc43150954",
+              "name": "priority",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "8713f48f-b17f-4092-ab4e-01480d5abcb1",
+              "name": "missing_fields",
+              "value": "={{ $json.missing_fields }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        464,
+        528
+      ],
+      "id": "26dec51c-c961-4d10-a5f8-0502dca458d3",
+      "name": "structure"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "=⚠️ **Не удалось назначить сотрудника**\n\n**Заявка №{{ $('requestget').item.json.id }}\n\n**Клиент:{{ $('Find Client').item.json.name }}\n**Телефон:{{ $('Find Client').item.json.phone }}\n**Устройство:{{ $('Find Client').item.json.device_type }}\n**Бренд:{{ $('Find Client').item.json.brand }}\n**Проблема:** {{ $('Find Client').item.json.problem }}\n**Город:{{ $('Find Client').item.json.city }}\n\n**Причина:** Нет свободных сотрудников с подходящей специализацией.\n\n📌 Заявка сохранена без назначения сотрудника. Требуется ручное назначение.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3376,
+        528
+      ],
+      "id": "781164b4-4df6-492f-bec7-d94bb37469eb",
+      "name": "Send a text message1",
+      "webhookId": "2d1e8c6a-1a26-4c76-b6a4-2089919a36eb"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9e5b068a-a65c-4bcc-88ad-c9de1de21859",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3152,
+        432
+      ],
+      "id": "ed22a0f9-3d4c-4b87-bbff-84bd065edbeb",
+      "name": "If2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        []
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parser": {
+      "main": [
+        [
+          {
+            "node": "structure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clients: Get Rows": {
+      "main": [
+        [
+          {
+            "node": "Find Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Client": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "requestget",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "requestget": {
+      "main": [
+        [
+          {
+            "node": "Employees: Get Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Employees: Get Rows": {
+      "main": [
+        [
+          {
+            "node": "Filter Available Employee",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Available Employee": {
+      "main": [
+        [
+          {
+            "node": "Select Employee",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Select Employee": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Requests: Update Row": {
+      "main": [
+        [
+          {
+            "node": "Employees: Get Rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Employees: Get Rows1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "structure": {
+      "main": [
+        [
+          {
+            "node": "Clients: Get Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Requests: Update Row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f0e6d610-19f8-42c7-a222-c1b6e8dcf782",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a3f5c53e696c94e82a3a773d31d08f47153be9fb605f0ee5a37fca5bc841ec9f"
+  },
+  "nodeGroups": [],
+  "id": "qXeEWmpcGUAZb2Q0",
+  "tags": []
+}

@@ -1,0 +1,2994 @@
+{
+  "name": "Repair Service — Telegram Callbacks",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "accept_request_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "a2748285-92f7-4149-895f-8db94821891b"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e55efdfb-c2e2-4f0b-a7fc-152c0d5ac732",
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "reject_request_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "8b169be1-fd04-439f-b710-491d9294c396",
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "=schedule_request_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "aeaaece1-9f15-4f6d-863a-b7a13376cdbf",
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "start_request_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9e3976b5-7512-412a-9415-6e77117b511f",
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "=confirm_visit_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b47ef534-9028-4c28-961f-6483296b61ab",
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "complete_repair_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "a9e5d720-1c84-42f3-a6a6-ef6282f69536",
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "change_time_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f390e2ef-ecaa-4451-8900-8b6fc5db0055",
+                    "leftValue": "={{ $('Telegram Trigger').first().json.message.text }}",
+                    "rightValue": "^\\d{1,2}:\\d{2}(?:\\s*[-–]\\s*\\d{1,2}:\\d{2})?$",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d944219b-dafe-4d9b-8192-360e5ae30167",
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notExists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -448,
+        -512
+      ],
+      "id": "cbcda735-06ab-493c-8252-d5590a8077fe",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $json.callback_query.id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        -976
+      ],
+      "id": "585c24ef-0663-4014-89df-9bdc5e73c074",
+      "name": "Answer Query a callback",
+      "webhookId": "9f8462ec-289f-4a4e-b352-604f4902f700"
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $json.callback_query.id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        -1168
+      ],
+      "id": "8426f20a-1c7e-43d7-98de-f726e9d2cade",
+      "name": "Answer Query a callback1",
+      "webhookId": "9f8462ec-289f-4a4e-b352-604f4902f700"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "accepted"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "device_type",
+              "displayName": "device_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "preferred_date",
+              "displayName": "preferred_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_from",
+              "displayName": "preferred_time_from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_to",
+              "displayName": "preferred_time_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "assigned_employee_id",
+              "displayName": "assigned_employee_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -1168
+      ],
+      "id": "e4d6eaa1-e226-48e9-80d7-279c83914a58",
+      "name": "Update row(s)"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "rejected"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "device_type",
+              "displayName": "device_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "preferred_date",
+              "displayName": "preferred_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_from",
+              "displayName": "preferred_time_from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_to",
+              "displayName": "preferred_time_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "assigned_employee_id",
+              "displayName": "assigned_employee_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -976
+      ],
+      "id": "7914f12c-5ce0-471b-b7a6-99babf236aae",
+      "name": "Update row(s)1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/editMessageReplyMarkup",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $('Telegram Trigger').first().json.callback_query.message.chat.id }}\",\n  \"message_id\": \"{{ $('Telegram Trigger').first().json.callback_query.message.message_id }}\",\n  \"reply_markup\": {\n    \"inline_keyboard\": [\n      [\n        {\n          \"text\": \"📅 Назначить визит\",\n          \"callback_data\": \"schedule_request_{{ $('Telegram Trigger').first().json.callback_query.data.split('_')[2] }}\"\n        }\n      ],\n      [\n        {\n          \"text\": \"🔧 Начать ремонт\",\n          \"callback_data\": \"start_request_{{ $('Telegram Trigger').first().json.callback_query.data.split('_')[2] }}\"\n        }\n      ]\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        -1168
+      ],
+      "id": "f732fa52-05a9-4171-9628-67e14673cdc7",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -784
+      ],
+      "id": "215b0f1c-ccc3-4264-9034-6c2b04d09c3a",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6634b390-e179-4968-835d-956ea478f619",
+              "leftValue": "={{ $json.preferred_date }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        -784
+      ],
+      "id": "a6b6e07a-9c12-4265-aaca-34c0b69e88d0",
+      "name": "Check Visit Time"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').first().json.callback_query.message.chat.id }}",
+        "text": "=Здравствуйте, {{ $('Get row(s)4').first().json.name }}!\n\nРемонт по вашей заявке завершён.\n\nЗаявка №{{ $('Get row(s)3').first().json.id }}\n\nУстройство: {{ $('Get row(s)3').first().json.device_type }}\nБренд: {{ $('Get row(s)3').first().json.brand || 'не указан' }}\n\nДата визита: {{ $('Get row(s)3').first().json.preferred_date }}\nВремя: {{ $('Get row(s)3').first().json.preferred_time_from }}{{ $('Get row(s)3').first().json.preferred_time_to ? '–' + $('Requests: Get Row').first().json.preferred_time_to : '' }}\n\nСтатус заявки: Завершён.\n\nСпасибо за обращение!",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        -208
+      ],
+      "id": "4c70e684-1746-4726-82d9-e67a173f0ed8",
+      "name": "Send a text message1",
+      "webhookId": "aaf25866-37d5-46db-96f4-c462c186cd58"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        -400
+      ],
+      "id": "a7a72131-ffe3-4039-af64-8929584df460",
+      "name": "Get row(s)1"
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $json.callback_query.id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        -784
+      ],
+      "id": "53f62e8c-e415-4119-a942-0550830eaf27",
+      "name": "Answer Query a callback2",
+      "webhookId": "9f8462ec-289f-4a4e-b352-604f4902f700"
+    },
+    {
+      "parameters": {
+        "operation": "editMessageText",
+        "chatId": "={{ $('Telegram Trigger').first().json.callback_query.message.chat.id }}",
+        "messageId": "={{ $('Telegram Trigger').first().json.callback_query.message.message_id }}",
+        "replyMarkup": "inlineKeyboard",
+        "text": "=Заявка #{{ $json.id }}\n\n📅 Дата: {{ $json.preferred_date }} \n🕐 Время: {{ $json.preferred_time_from }}\n\nПодтвердить визит?\n",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Подтвердить визит",
+                    "additionalFields": {
+                      "callback_data": "=confirm_visit_{{ $('Check Visit Time').item.json.id }}"
+                    }
+                  },
+                  {
+                    "text": "🕐 Изменить время",
+                    "additionalFields": {
+                      "callback_data": "=change_time_{{ $('Check Visit Time').item.json.id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        -784
+      ],
+      "id": "16ca5600-8d8b-4dcf-a8a3-7f6baa5aedef",
+      "name": "Edit a text message",
+      "webhookId": "01a86e4e-8811-4b11-b856-c7461c52e29d"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "scheduled"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "device_type",
+              "displayName": "device_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "preferred_date",
+              "displayName": "preferred_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_from",
+              "displayName": "preferred_time_from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_to",
+              "displayName": "preferred_time_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "assigned_employee_id",
+              "displayName": "assigned_employee_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        -400
+      ],
+      "id": "018bddc0-fef0-4ce0-a61b-78e3a0ec887e",
+      "name": "Update row(s)2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        -592
+      ],
+      "id": "4b46d5cd-8b6f-4931-8532-6e5a3c96bca8",
+      "name": "Get row(s)2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "in_progress"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "device_type",
+              "displayName": "device_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "preferred_date",
+              "displayName": "preferred_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_from",
+              "displayName": "preferred_time_from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_to",
+              "displayName": "preferred_time_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "assigned_employee_id",
+              "displayName": "assigned_employee_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -592
+      ],
+      "id": "9cf96d71-ab47-47c2-881f-174b5d298593",
+      "name": "Update row(s)3"
+    },
+    {
+      "parameters": {
+        "operation": "editMessageText",
+        "chatId": "={{ $('Telegram Trigger').first().json.callback_query.message.chat.id }}",
+        "messageId": "={{ $('Telegram Trigger').first().json.callback_query.message.message_id }}",
+        "replyMarkup": "inlineKeyboard",
+        "text": "=Заявка #{{ $('Get row(s)2').first().json.id }}\n\n🔧 Ремонт начат\n\n📅 Дата визита: {{ $('Get row(s)2').first().json.preferred_date }}\n🕐 Время: {{ $('Get row(s)2').first().json.preferred_time_from }}{{ $('Get row(s)2').first().json.preferred_time_to ? '–' + $('Requests: Get Row').first().json.preferred_time_to : '' }}\n\nСтатус: В работе\n",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "🏁 Завершить ремонт",
+                    "additionalFields": {
+                      "callback_data": "=complete_repair_{{ $('Get row(s)2').first().json.id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        -592
+      ],
+      "id": "fea4425a-a9c4-42af-a3b6-235269b7061c",
+      "name": "Edit a text message2",
+      "webhookId": "01a86e4e-8811-4b11-b856-c7461c52e29d"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        -208
+      ],
+      "id": "00e6ac52-10f5-49cd-9a2c-41c5a0876257",
+      "name": "Get row(s)3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "completed"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "device_type",
+              "displayName": "device_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "preferred_date",
+              "displayName": "preferred_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_from",
+              "displayName": "preferred_time_from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_to",
+              "displayName": "preferred_time_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "assigned_employee_id",
+              "displayName": "assigned_employee_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -208
+      ],
+      "id": "aeb6999f-c63d-446b-8be5-0ff7244488ae",
+      "name": "Update row(s)4"
+    },
+    {
+      "parameters": {
+        "operation": "editMessageText",
+        "chatId": "={{ $('Telegram Trigger').first().json.callback_query.message.chat.id }}",
+        "messageId": "={{ $('Telegram Trigger').first().json.callback_query.message.message_id }}",
+        "replyMarkup": "inlineKeyboard",
+        "text": "=Заявка #{{ $('Get row(s)3').first().json.id }}\n\n✅ Ремонт завершён\n\n📅 Дата визита: {{ $('Get row(s)3').first().json.preferred_date }}\n🕐 Время: {{ $('Get row(s)3').first().json.preferred_time_from }}\n\nСтатус: Завершён\n",
+        "inlineKeyboard": {
+          "rows": []
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        -208
+      ],
+      "id": "5c256854-b2cb-446b-8e9c-76e03ecd2703",
+      "name": "Edit a text message3",
+      "webhookId": "01a86e4e-8811-4b11-b856-c7461c52e29d"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Oi4kuTmnWGGLP4Wf",
+          "mode": "list",
+          "cachedResultName": "Clients",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/Oi4kuTmnWGGLP4Wf"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Get row(s)3').first().json.client_id }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -208
+      ],
+      "id": "e0d43ed8-4dc0-4044-b239-09f8b5e828f3",
+      "name": "Get row(s)4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ec6b4b72-dacd-4903-9e1a-192b54d90125",
+              "leftValue": "={{ $('Get row(s)4').first().json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        -208
+      ],
+      "id": "c7926570-216e-4e4c-91ca-f95376228641",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "editMessageText",
+        "chatId": "={{ $('Telegram Trigger').first().json.callback_query.message.chat.id }}",
+        "messageId": "={{ $('Telegram Trigger').first().json.callback_query.message.message_id }}",
+        "replyMarkup": "inlineKeyboard",
+        "text": "=Заявка #{{ $json.id }}\n\n❌ Заявка отклонена\n\nСтатус: Отклонена\n",
+        "inlineKeyboard": {
+          "rows": []
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        -976
+      ],
+      "id": "62a6bea9-f0f4-4d77-9a7d-eff1fc38b2a4",
+      "name": "Edit a text message4",
+      "webhookId": "01a86e4e-8811-4b11-b856-c7461c52e29d"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        -16
+      ],
+      "id": "ab4cf662-0a13-4645-b0d3-7498f7e78bce",
+      "name": "Get row(s)5"
+    },
+    {
+      "parameters": {
+        "operation": "editMessageText",
+        "chatId": "={{ $('Telegram Trigger').first().json.callback_query.message.chat.id }}",
+        "messageId": "={{ $('Telegram Trigger').first().json.callback_query.message.message_id }}",
+        "replyMarkup": "inlineKeyboard",
+        "text": "=Заявка #{{ $json.request_id }}\n\nТекущее время:\n🕐 {{ $('Get row(s)5').first().json.preferred_time_from }}{{ $('Get row(s)5').first().json.preferred_time_to ? '–' + $('Requests: Get Row').first().json.preferred_time_to : '' }}\n\nВведите новое время визита.\n\nНапример:\n18:30\n\nИли диапазон:\n18:00–19:00\n",
+        "inlineKeyboard": {
+          "rows": []
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        -16
+      ],
+      "id": "eec7e928-f29a-42d0-a5d0-4a0f54ec6b68",
+      "name": "Edit a text message5",
+      "webhookId": "01a86e4e-8811-4b11-b856-c7461c52e29d"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "yQ6foTnCu6hq0drR",
+          "mode": "list",
+          "cachedResultName": "pending_actions",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/yQ6foTnCu6hq0drR"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "employee_telegram_id",
+              "keyValue": "={{ $('Telegram Trigger').first().json.message.from.id }}"
+            },
+            {
+              "keyName": "action",
+              "keyValue": "change_time"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        176
+      ],
+      "id": "879554c6-b564-4bda-969b-36d47dd211d8",
+      "name": "Get row(s)6",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $json.request_id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "preferred_time_from": "={{ $json.preferred_time_from }}",
+            "preferred_time_to": "={{ $json.preferred_time_to }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "device_type",
+              "displayName": "device_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_date",
+              "displayName": "preferred_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "preferred_time_from",
+              "displayName": "preferred_time_from",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "preferred_time_to",
+              "displayName": "preferred_time_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "assigned_employee_id",
+              "displayName": "assigned_employee_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        176
+      ],
+      "id": "e61ef80e-ca6d-4815-b76e-472c3e6f178e",
+      "name": "Update row(s)5",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "yQ6foTnCu6hq0drR",
+          "mode": "list",
+          "cachedResultName": "pending_actions",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/yQ6foTnCu6hq0drR"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "employee_telegram_id": "={{ $('Telegram Trigger').first().json.callback_query.from.id }}",
+            "request_id": "={{ $('Get row(s)5').first().json.id }}",
+            "action": "change_time",
+            "created_at": "={{ new Date().toISOString() }}",
+            "message_id": "={{ $('Telegram Trigger').first().json.callback_query.message.message_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "employee_telegram_id",
+              "displayName": "employee_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "action",
+              "displayName": "action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -16
+      ],
+      "id": "9c91af5c-6217-4969-b9b7-548bedca0886",
+      "name": "Insert row1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6166cce4-b3cb-4d7d-be8c-7d133588de0c",
+              "leftValue": "={{ $('Get row(s)6').all().length > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        176
+      ],
+      "id": "8f50b6a0-4060-43e8-86b0-35801b6a1e99",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $('Telegram Trigger').first().json.message.text.trim();\nconst pending = $('Get row(s)6').first().json;\n\nconst match = text.match(/^(\\d{1,2}):(\\d{2})(?:\\s*[-–]\\s*(\\d{1,2}):(\\d{2}))?$/);\n\nif (!match) {\n  throw new Error('Введите время в формате 18:30 или 18:00–19:00');\n}\n\nconst fromHour = Number(match[1]);\nconst fromMinute = Number(match[2]);\n\nif (fromHour > 23 || fromMinute > 59) {\n  throw new Error('Некорректное время');\n}\n\nconst from = `${String(fromHour).padStart(2, '0')}:${String(fromMinute).padStart(2, '0')}`;\n\nlet to = null;\n\nif (match[3]) {\n  const toHour = Number(match[3]);\n  const toMinute = Number(match[4]);\n\n  if (toHour > 23 || toMinute > 59) {\n    throw new Error('Некорректное конечное время');\n  }\n\n  to = `${String(toHour).padStart(2, '0')}:${String(toMinute).padStart(2, '0')}`;\n}\n\nreturn [{\n  json: {\n    request_id: pending.request_id,\n    message_id: pending.message_id,\n    preferred_time_from: from,\n    pending_action_id: pending.id,\n    preferred_time_to: to\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        176
+      ],
+      "id": "89394221-ec82-4f56-991f-6eb81d4ea86f",
+      "name": "code"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Get row(s)6').item.json.employee_telegram_id }}",
+        "text": "=Заявка #{{ $('code').first().json.request_id}}\n\n📅 Дата: {{ $json.preferred_date }}\n🕐 Новое время: {{ $('code').first().json.preferred_time_from }}{{ $json.preferred_time_to ? '–' + $json.preferred_time_to : '' }}\n\nПодтвердить назначение визита?\n",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Подтвердить ",
+                    "additionalFields": {
+                      "callback_data": "=confirm_visit_{{ $('code').first().json.request_id}}"
+                    }
+                  },
+                  {
+                    "text": "🕐 Изменить время",
+                    "additionalFields": {
+                      "callback_data": "=change_time_{{ $('code').first().json.request_id}}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        176
+      ],
+      "id": "5ce36f42-fedf-4520-8b70-b4287543dbf2",
+      "name": "Send a text message2",
+      "webhookId": "01a86e4e-8811-4b11-b856-c7461c52e29d",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "CmCaYYBJQWQvhWBF",
+          "mode": "list",
+          "cachedResultName": "Interactions",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/CmCaYYBJQWQvhWBF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_id": "={{ $('Get row(s)8').first().json.client_id }}",
+            "request_id": "={{ $('Get row(s)8').first().json.id }}",
+            "channel": "telegram",
+            "direction": "outbound",
+            "message": "Заявка принята сотрудником",
+            "created_at": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "channel",
+              "displayName": "channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "direction",
+              "displayName": "direction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        -1168
+      ],
+      "id": "44b22c16-5997-45ec-ab02-0ed0d0423858",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -1168
+      ],
+      "id": "af3348c1-8788-4a4d-b91a-9309c5e3900c",
+      "name": "Get row(s)8"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "CmCaYYBJQWQvhWBF",
+          "mode": "list",
+          "cachedResultName": "Interactions",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/CmCaYYBJQWQvhWBF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_id": "={{ $('Get row(s)9').first().json.client_id }}",
+            "request_id": "={{ $('Get row(s)9').first().json.id }}",
+            "channel": "telegram",
+            "direction": "outbound",
+            "message": "Заявка отклонена сотрудником",
+            "created_at": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "channel",
+              "displayName": "channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "direction",
+              "displayName": "direction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        -976
+      ],
+      "id": "65b994fc-1217-4c0a-8572-ba0c3f86b678",
+      "name": "Insert row2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "HkrD9mBEX5gpHwlk",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/HkrD9mBEX5gpHwlk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ Number($('Telegram Trigger').first().json.callback_query.data.split('_')[2]) }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -976
+      ],
+      "id": "7f2711c7-f558-4ebd-86f6-937b05eca29c",
+      "name": "Get row(s)9"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "CmCaYYBJQWQvhWBF",
+          "mode": "list",
+          "cachedResultName": "Interactions",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/CmCaYYBJQWQvhWBF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_id": "={{ $('Get row(s)1').first().json.client_id }}",
+            "request_id": "={{ $('Get row(s)1').first().json.id }}",
+            "channel": "telegram",
+            "direction": "outbound",
+            "message": "Визит назначен",
+            "created_at": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "channel",
+              "displayName": "channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "direction",
+              "displayName": "direction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -400
+      ],
+      "id": "94c4946f-7686-41a8-899d-433d3a93385d",
+      "name": "Insert row3"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "CmCaYYBJQWQvhWBF",
+          "mode": "list",
+          "cachedResultName": "Interactions",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/CmCaYYBJQWQvhWBF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_id": "={{ $('Get row(s)2').first().json.client_id }}",
+            "request_id": "={{ $('Get row(s)2').first().json.id }}",
+            "channel": "telegram",
+            "direction": "outbound",
+            "message": "Ремонт начат",
+            "created_at": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "channel",
+              "displayName": "channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "direction",
+              "displayName": "direction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -592
+      ],
+      "id": "29605b2e-4fac-4f9c-bc85-179ca1a08d48",
+      "name": "Insert row4"
+    },
+    {
+      "parameters": {
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "value": "yQ6foTnCu6hq0drR",
+          "mode": "list",
+          "cachedResultName": "pending_actions",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/yQ6foTnCu6hq0drR"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('code').first().json.pending_action_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        896,
+        80
+      ],
+      "id": "12a7bdfd-d7dd-49aa-a10d-a5ebdd0b8ada",
+      "name": "Delete row(s)"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "callback_query",
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -672,
+        -400
+      ],
+      "id": "1610a802-32fe-4410-9abb-9f9ecfe2710e",
+      "name": "Telegram Trigger",
+      "webhookId": "88ecaa25-3f5c-4e23-b237-7273bae92472"
+    },
+    {
+      "parameters": {
+        "operation": "editMessageText",
+        "chatId": "={{ $('Telegram Trigger').first().json.callback_query.message.chat.id }}",
+        "messageId": "={{ $('Telegram Trigger').first().json.callback_query.message.message_id }}",
+        "replyMarkup": "inlineKeyboard",
+        "text": "=Заявка #{{ $json.id }}\n\n✅ Визит назначен\n\n📅 Дата: {{ DateTime.fromISO($json.preferred_date).toFormat('dd.MM.yyyy') }}\n\n🕐 Время: {{ $json.preferred_time_from }}{{ $json.preferred_time_to ? '–' + $json.preferred_time_to : '' }}\n\nСтатус: Запланирован\n",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "🔧 Начать ремонт",
+                    "additionalFields": {
+                      "callback_data": "=start_request_{{ $json.id }}"
+                    }
+                  },
+                  {
+                    "text": "🕐 Изменить время",
+                    "additionalFields": {
+                      "callback_data": "=change_time_{{ $json.id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        -400
+      ],
+      "id": "ed4d4e20-b05b-447c-9c02-c61d8c386ced",
+      "name": "Edit a text message1",
+      "webhookId": "01a86e4e-8811-4b11-b856-c7461c52e29d"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "CmCaYYBJQWQvhWBF",
+          "mode": "list",
+          "cachedResultName": "Interactions",
+          "cachedResultUrl": "/projects/YMmlNDQJoRjNeSqb/datatables/CmCaYYBJQWQvhWBF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_id": "={{ $('Get row(s)3').first().json.client_id }}",
+            "request_id": "={{ $('Get row(s)3').first().json.id }}",
+            "channel": "telegram",
+            "direction": "outbound",
+            "message": "Ремонт завершен",
+            "created_at": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "request_id",
+              "displayName": "request_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "channel",
+              "displayName": "channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "direction",
+              "displayName": "direction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        -208
+      ],
+      "id": "92d39db6-701f-4a9b-b29e-1f715708f78e",
+      "name": "Insert row5"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.message.from.id }}",
+        "text": "=Некорректное значение. Пользуйтесь кнопками или следуйте инструкциям. \n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        368
+      ],
+      "id": "f9d3f599-75fe-40ea-b16a-c9f68ddd16e8",
+      "name": "Send a text message3",
+      "webhookId": "01a86e4e-8811-4b11-b856-c7461c52e29d"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id}}",
+        "text": "=Некорректное значение. Следуйте инструкциям. \n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        272
+      ],
+      "id": "96d9ddfb-3e28-461f-aedb-1c54a8617529",
+      "name": "Send a text message4",
+      "webhookId": "01a86e4e-8811-4b11-b856-c7461c52e29d"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Answer Query a callback1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Answer Query a callback",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Answer Query a callback2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer Query a callback": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer Query a callback1": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Check Visit Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Visit Time": {
+      "main": [
+        [
+          {
+            "node": "Edit a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Edit a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer Query a callback2": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit a text message": {
+      "main": [
+        []
+      ]
+    },
+    "Get row(s)2": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)3": {
+      "main": [
+        [
+          {
+            "node": "Edit a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)3": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)4": {
+      "main": [
+        [
+          {
+            "node": "Edit a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit a text message3": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)4": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Edit a text message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)5": {
+      "main": [
+        [
+          {
+            "node": "Insert row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)6": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)5": {
+      "main": [
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row1": {
+      "main": [
+        [
+          {
+            "node": "Edit a text message5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "code": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)8": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit a text message4": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)9": {
+      "main": [
+        [
+          {
+            "node": "Insert row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)2": {
+      "main": [
+        [
+          {
+            "node": "Insert row3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit a text message2": {
+      "main": [
+        [
+          {
+            "node": "Insert row4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message2": {
+      "main": [
+        [
+          {
+            "node": "Delete row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit a text message1": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Insert row5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e2b8f32d-c30c-4e9d-8000-14c2d1978e19",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a3f5c53e696c94e82a3a773d31d08f47153be9fb605f0ee5a37fca5bc841ec9f"
+  },
+  "nodeGroups": [],
+  "id": "Lnx5UKQiEksX5grk",
+  "tags": []
+}
